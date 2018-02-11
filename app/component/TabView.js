@@ -4,22 +4,22 @@
  */
 'use strict';
 
-import React, { Component } from 'react'
+import React, { Component } from 'react' //导入react
 import {
   Text,
   Dimensions,
   StyleSheet,
   Animated,
   Image
-} from 'react-native'
-import Icon from 'react-native-vector-icons/Ionicons'
-import TabNavigator from 'react-native-tab-navigator'
-import px2dp from '../util'
-let {width, height} = Dimensions.get('window')
-import HomePage from '../pages/Home'
-import Discover from '../pages/Discover'
-import Order from '../pages/Order'
-import My from '../pages/My'
+} from 'react-native' //导入基础组件
+import Icon from 'react-native-vector-icons/Ionicons' //导入vector-icons图标包
+import TabNavigator from 'react-native-tab-navigator' //导入tab-navigator依赖包
+import px2dp from '../util' //导入px等比例缩放模块
+let {width, height} = Dimensions.get('window') //获取设备“宽度、高度”
+import HomePage from '../pages/Home' // 模块“主页”
+import Discover from '../pages/Discover' // 模块“发现”
+import Order from '../pages/Order' // 模块“订单”
+import My from '../pages/My'  // 模块“我的”
 
 export default class TabView extends Component {
   constructor(props){
@@ -51,6 +51,7 @@ export default class TabView extends Component {
           (this.state.hideTabBar?styles.hide:{})
         ]}
         sceneStyle={{ paddingBottom: styles.tabbar.height }}>
+          {/*map遍历本组件的tabNames属性（属性值是一个数组），生成对应的顶部tab栏*/}
           {
             this.tabNames.map((item, i) => {
               return (

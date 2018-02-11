@@ -9,44 +9,47 @@ import {
   Text,
   View,
   BackAndroid,
-  ScrollView,
-  StyleSheet,
-  AlertIOS,
-  RefreshControl,
+  //BackHandler,
+  ScrollView, //滚动视图组件（类似的还有ListView列表视图组件）
+  StyleSheet, //样式组件
+  AlertIOS,  //提示组件
+  RefreshControl,  //刷新控制组件
   TouchableOpacity,
   TouchableNativeFeedback,
   TouchableHighlight,
   Image,
   TextInput,
   Platform,
-  TouchableWithoutFeedback,
-  Dimensions,
+  TouchableWithoutFeedback, //触屏组件
+  Dimensions, //计算屏幕宽高组件
   ActivityIndicator,
   Animated
 } from 'react-native'
-import LocalImg from '../images'
-import px2dp from '../util'
-import Icon from 'react-native-vector-icons/Ionicons'
-import Swiper from 'react-native-swiper'
-import SplashScreen from 'react-native-splash-screen'
 
-import SearchView from '../component/SearchView'
-import LbsModal from '../component/LbsModal'
-import TabView from '../component/TabView'
+import Icon from 'react-native-vector-icons/Ionicons' //导入vector-icons图标依赖包
+import Swiper from 'react-native-swiper' //导入swiper滑动依赖包
+import SplashScreen from 'react-native-splash-screen' //导入加载中的展示效果依赖包
+
+import LocalImg from '../images' //导入本地图片组件（已封装在images.js里）
+import px2dp from '../util' //导入px等比例缩放模块
+import SearchView from '../component/SearchView' //导入搜索组件
+import LbsModal from '../component/LbsModal' //导入选择收货地址的modal组件
+//import TabView from '../component/TabView' //导入页面底部tab组件
 import Bz from '../component/Bz'
-import DetailPage from './DetailPage'
-import data from '../data'
+import DetailPage from './DetailPage' //导入详情页
+import data from '../data' //
 
-const isIOS = Platform.OS == "ios"
+const isIOS = Platform.OS == "ios" //赋值运算符优先级最低，因此会先计算右侧的==判断，返回true或者false再赋给isIos
 const { width, height } = Dimensions.get('window')
-const headH = px2dp(isIOS?140:120)
+const headH = px2dp(isIOS?140:120) //顶部高度
 const InputHeight = px2dp(28)
 
 export default class HomePage extends Component {
+  /*定义默认的状态及属性*/
   constructor(props){
       super(props)
       this.state = {
-        location: "三里屯SOHO",
+        location: "江西南昌",
         scrollY: new Animated.Value(0),
         searchView: new Animated.Value(0),
         modalVisible: false,
@@ -61,13 +64,20 @@ export default class HomePage extends Component {
       this.SEARCH_DIFF_Y = this.SEARCH_FIX_Y-this.SEARCH_BOX_Y
       this.SEARCH_FIX_DIFF_Y = headH-this.SEARCH_FIX_Y-headH
   }
+  /*组件渲染成功回调方法*/
   componentDidMount(){
       SplashScreen.hide()
       BackAndroid.addEventListener('hardwareBackPress', function () {
+          /*if (!this.onMainScreen()) {
+              this.goBack();
+              return true;
+          }
+          return false;*/
           BackAndroid.exitApp(0)
           return true
       })
   }
+  /*渲染顶部*/
   _renderHeader(){
     let searchY = this.state.scrollY.interpolate({
       inputRange: [0, this.SEARCH_BOX_Y, this.SEARCH_FIX_Y, this.SEARCH_FIX_Y],
@@ -128,6 +138,7 @@ export default class HomePage extends Component {
       </View>
     )
   }
+  /*渲染固定顶部*/
   _renderFixHeader(){
     let showY = this.state.scrollY.interpolate({
       inputRange: [0, this.SEARCH_BOX_Y, this.SEARCH_FIX_Y, this.SEARCH_FIX_Y],
@@ -155,6 +166,7 @@ export default class HomePage extends Component {
       </Animated.View>
     )
   }
+  /*打开、 关闭搜索条*/
   openSearch(){
     this._scrollY = this.state.scrollY._value
     const { timing } = Animated
@@ -184,9 +196,11 @@ export default class HomePage extends Component {
     }).start(() => this.setState({searchBtnShow: true}))
     TabView.showTabBar(200)
   }
+  /*打开地理位置选择*/
   openLbs(){
     this.setState({modalVisible: true})
   }
+  /*修改位置*/
   changeLocation(location){
     this.setState({location})
   }
@@ -226,6 +240,7 @@ export default class HomePage extends Component {
       </Swiper>
     )
   }
+  /*渲染热卖区*/
   _renderHot(){
     return ["热卖套餐", "霸王餐", "年货到新家", "5折优惠餐"].map((n, i) => {
       let styl = {
@@ -266,8 +281,8 @@ export default class HomePage extends Component {
         </View>
       )
     })
-
   }
+  /*渲染限时抢购区*/
   _renderLtime(){
     return (
       <View>
@@ -291,7 +306,7 @@ export default class HomePage extends Component {
         <ScrollView
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
-          horizontal={true}
+          horizontal={true} //设置横向滚动
           style={styles.lTimeScrollView}>
           <View style={{flexDirection: "row", alignItems: "center", paddingTop: 15}}>
             {
@@ -318,6 +333,7 @@ export default class HomePage extends Component {
       </View>
     )
   }
+  /*渲染品质优选区*/
   _renderQuality(){
     return (
       <View>
@@ -352,6 +368,7 @@ export default class HomePage extends Component {
       </View>
     )
   }
+  /*渲染礼品区*/
   _renderGift(){
     return (
       <View style={{flexDirection: "row"}}>
@@ -372,6 +389,7 @@ export default class HomePage extends Component {
       </View>
     )
   }
+  /*渲染推荐商家区*/
   _renderBZ(){
     return data.list.map((item, i) => {
       item.onPress = () => {
@@ -383,6 +401,7 @@ export default class HomePage extends Component {
       return (<Bz {...item} key={i}/>)
     })
   }
+  /*刷新页面（2秒刷新间隔时间）*/
   _onRefresh(){
     this.setState({isRefreshing: true});
     setTimeout(() => {

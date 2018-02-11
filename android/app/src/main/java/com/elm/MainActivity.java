@@ -1,9 +1,9 @@
 package com.elm;
 
-import android.os.Bundle;
+import android.os.Bundle; //1.导入android.os打包
 
 import com.facebook.react.ReactActivity;
-import com.cboy.rn.splashscreen.SplashScreen;
+import com.cboy.rn.splashscreen.SplashScreen; //2.导入屏包
 
 public class MainActivity extends ReactActivity {
 
@@ -17,7 +17,7 @@ public class MainActivity extends ReactActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) { //3.显示启动的方法（先显示SplashaScreen）
         SplashScreen.show(this,true);
         super.onCreate(savedInstanceState);
     }
